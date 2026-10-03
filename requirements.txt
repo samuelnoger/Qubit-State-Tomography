@@ -1,0 +1,7 @@
+qutip>=5
+numpy
+scipy
+matplotlib
+torch
+scikit-learn
+tqdm
