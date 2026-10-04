@@ -2,8 +2,8 @@
 
 A self-contained project on **quantum state tomography**: reconstructing the density matrix of two qubits from measurement statistics, first with ideal readout, then through the simulated readout chain of a superconducting qubit. The readout classifiers (matched filter, linear discriminant, and a 1D CNN) come from [Qubit-Readout-ML](https://github.com/samuelnoger/Qubit-Readout-ML).
 
-<img src="results/figures/ideal_tomography.png" alt="Ideal tomography" width="400">
-<img src="results/figures/readout_tomography.png" alt="Tomography through the readout chain" width="400">
+<img src="results/figures/ideal_tomography.png" alt="Ideal tomography" width="600">
+<img src="results/figures/readout_tomography.png" alt="Tomography through the readout chain" width="600">
 
 ---
 
