@@ -74,7 +74,8 @@ def plot(results, chain, args):
                 arr = np.array(results[kind][method][name])
                 label = f"{NICE.get(name, name)} (F={chain[name]['fid'].mean():.3f})"
                 ax.errorbar(shots, arr.mean(1), yerr=arr.std(1) / np.sqrt(arr.shape[1]), marker="s", capsize=3, label=label)
-            ax.set_xscale("log"); ax.set_yscale("log"); ax.grid(True, which="both", alpha=0.3)
+            ax.set_xscale("log"); ax.set_yscale("log")
+            ax.set_xlim(shots.min() / 3, shots.max() * 3)
             if row == 0:
                 ax.set_title(TITLES[kind])
             if row == 1:
@@ -92,6 +93,14 @@ def plot(results, chain, args):
 
 def main():
     args = parse_args()
+    json_path = os.path.join(args.results_dir, "sweeps", "readout_tomography.json")
+    if args.replot:                                    # redraw from saved results, no simulation
+        with open(json_path) as f:
+            d = json.load(f)
+        args.shots, args.n_states, args.n_cal = d["shots"], d["n_states"], d["n_cal"]
+        chain = {n: {"fid": np.array(v)} for n, v in d["assignment_fidelity"].items()}
+        plot(d["results"], chain, args)
+        return
     chain, phys = build_chain(args)
     results = run(args, chain)
     os.makedirs(os.path.join(args.results_dir, "sweeps"), exist_ok=True)

@@ -18,6 +18,7 @@ def parse_args():
     parser.add_argument('--mle-iters', type=int, default=500, help='Maximum iterations of the MLE algorithm')
 
     # Milestone 2: readout chain
+    parser.add_argument('--replot', action='store_true', help='Redraw the milestone 2 figure from the saved JSON, no simulation')
     parser.add_argument('--classifiers', type=str, nargs='+', default=['matched', 'lda', 'cnn'],
                         choices=['integrated', 'matched', 'lda_indep', 'lda', 'cnn'], help='Readout classifiers to compare')
     parser.add_argument('--cnn-checkpoint', type=str, default='checkpoints/readout_cnn_2q.pth',
