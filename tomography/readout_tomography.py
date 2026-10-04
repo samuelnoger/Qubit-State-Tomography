@@ -22,8 +22,8 @@ from train.arguments import parse_args
 
 BELL_NAMES = ["phi+", "phi-", "psi+", "psi-"]
 TITLES = {"pure": "Random pure states", "mixed": "Random mixed states", "bell": "Bell states"}
-NICE = {"integrated": "Integrated threshold", "matched": "Matched filter", "lda_indep": "LDA (own channels)",
-        "lda": "Linear (LDA)", "cnn": "1D CNN"}
+NICE = { "cnn": "1D CNN","integrated": "Integrated threshold", "matched": "Matched filter", "lda_indep": "LDA (own channels)",
+        "lda": "Linear (LDA)"}
 
 
 def make_state(kind, rng, rank):
@@ -69,11 +69,11 @@ def plot(results, chain, args):
             ax = axes[row][col]
             arr = np.array(results[kind]["ideal"])
             ax.errorbar(shots, arr.mean(1), yerr=arr.std(1) / np.sqrt(arr.shape[1]), color="k", marker="o",
-                        capsize=3, label="ideal readout")
+                        capsize=2, markersize=3, linewidth=1, label="ideal readout")
             for name in chain:
                 arr = np.array(results[kind][method][name])
                 label = f"{NICE.get(name, name)} (F={chain[name]['fid'].mean():.3f})"
-                ax.errorbar(shots, arr.mean(1), yerr=arr.std(1) / np.sqrt(arr.shape[1]), marker="s", capsize=3, label=label)
+                ax.errorbar(shots, arr.mean(1), yerr=arr.std(1) / np.sqrt(arr.shape[1]), marker="s", capsize=2, label=label, markersize=3, linewidth=1)
             ax.set_xscale("log"); ax.set_yscale("log")
             ax.set_xlim(shots.min() / 3, shots.max() * 3)
             if row == 0:
