@@ -50,6 +50,7 @@ def parse_args():
     parser.add_argument('--n-test-tomo', type=int, default=10000)
     parser.add_argument('--bell-noise', type=float, default=0.05, help='Depolarising noise added to exact Bell states')
     parser.add_argument('--tomo-hidden-dim', type=int, default=256)
+    parser.add_argument('--tomo-n-layers', type=int, default=3, help='Number of hidden layers in the neural tomography model')
 
     args, unknown = parser.parse_known_args()
     return args

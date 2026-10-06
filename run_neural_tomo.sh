@@ -4,13 +4,15 @@ set -e
 # Default strictly to the two necessary priors
 STATES=${STATES:-"broad near_bell"}
 EPOCHS=${EPOCHS:-100}
-N_TRAIN=${N_TRAIN:-200000}
+N_TRAIN=${N_TRAIN:-600000}
 N_VAL=${N_VAL:-5000}
 N_TEST=${N_TEST:-10000}
-BATCH_SIZE=${BATCH_SIZE:-512}
+BATCH_SIZE=${BATCH_SIZE:-1024}
 LR=${LR:-1e-3}
-HIDDEN_DIM=${HIDDEN_DIM:-256}
-DEVICE=${DEVICE:-mps}
+HIDDEN_DIM=${HIDDEN_DIM:-264}
+N_LAYERS=${N_LAYERS:-4}
+
+DEVICE=${DEVICE:-cpu}
 
 echo "Neural tomography (Variable Shots): n_train=$N_TRAIN, epochs=$EPOCHS, states=$STATES"
 
@@ -42,7 +44,8 @@ for STATE in $STATES; do
         --batch-size $BATCH_SIZE \
         --learning-rate $LR \
         --tomo-hidden-dim $HIDDEN_DIM \
-        --checkpoint-dir "$CHECKPOINT_DIR"
+        --checkpoint-dir "$CHECKPOINT_DIR" \
+        --tomo-n-layers $N_LAYERS
 
     echo ""
 done

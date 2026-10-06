@@ -23,7 +23,7 @@ class NeuralTomography(nn.Module):
     def forward(self, x):
         # x is (B, 37). Split into frequencies and log_N
         freqs = x[:, :36]
-        log_N = x[:, 36:]
+        log_N = (x[:, 36:] - 2.5) / 1.5
         
         # Project frequencies and concatenate log_N
         correlators = freqs @ self.M

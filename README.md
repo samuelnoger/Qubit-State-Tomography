@@ -39,6 +39,13 @@ The QuTiP simulator implements $T_1$ decay, dispersive cavity response, and mult
 - **A calibrated correction recovers scaling:** With MLE correction, the infidelity resumes falling with the number of shots. 
 - **Classifier impact:** Uncorrected, the matched filter performs worse than the LDA or CNN. With correction, the CNN and LDA perform similarly and slightly outperform the matched filter.
 
+### Inference Speed
+The neural network provides a massive reduction in reconstruction latency compared to Maximum Likelihood Estimation. This microsecond-scale execution makes the neural prior viable for real-time hardware feedback loops where MLE introduces critical bottlenecks.
+
+* **MLE (2000 iterations):** ~22.0 ms / state
+* **Neural Network (Unbatched):** ~90-110 μs / state (~200x speedup)
+* **Neural Network (Batched, size 100):** ~3-5 μs / state (> 4,000x speedup)
+
 ## Development Methodology
 
 The core CNN architecture, QuTiP simulation boilerplate, and classical baselines were scaffolded with the assistance of AI coding tools. Primary technical contributions focus on structuring the quantum state tomography math (Maximum Likelihood Estimation and Linear Inversion), designing the physical simulation to isolate multi-qubit crosstalk, decoupling analog data generation pools for high-shot scaling, and engineering variable-shot neural network architectures to benchmark learned priors against fundamental statistical limits.
