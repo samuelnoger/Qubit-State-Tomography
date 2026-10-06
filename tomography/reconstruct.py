@@ -2,7 +2,7 @@
 """State reconstruction from measured counts: linear inversion, physical projection, and MLE."""
 import numpy as np
 
-from tomography.states import PAULI, I2, S1, S2
+from utils.states import PAULI, I2, S1, S2
 
 
 def linear_inversion(counts):
@@ -63,7 +63,7 @@ def mle(counts, E, iters=500, tol=1e-10):
 
 
 if __name__ == "__main__":
-    from tomography.states import (measurement_operators, random_pure_state, random_mixed_state,
+    from utils.states import (measurement_operators, random_pure_state, random_mixed_state,
                                    bell_state, sample_counts, born_probabilities, fidelity)
     rng = np.random.default_rng(1)
     E = measurement_operators()

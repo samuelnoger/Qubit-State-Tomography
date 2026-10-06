@@ -1,4 +1,4 @@
-# tomography/readout_chain.py
+# utils/readout_chain.py
 """Readout chain for tomography: analog records -> classifier -> reported bits -> 4x4 confusion matrix.
 
 Bit convention (used everywhere):
@@ -14,7 +14,7 @@ import os
 import numpy as np
 
 from baselines import _fit_score, _best_threshold, OWN_CHANNELS, fidelity_per_qubit
-from tomography.states import born_probabilities
+from utils.states import born_probabilities
 
 
 def bit_index(bits):

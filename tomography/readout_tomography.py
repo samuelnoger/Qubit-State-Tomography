@@ -14,10 +14,10 @@ import os
 import matplotlib.pyplot as plt
 import numpy as np
 
-from tomography.states import (measurement_operators, random_pure_state, random_mixed_state,
+from utils.states import (measurement_operators, random_pure_state, random_mixed_state,
                                bell_state, sample_counts, fidelity)
 from tomography.reconstruct import mle
-from tomography.readout_chain import build_chain, effective_operators, sample_counts_readout
+from utils.readout_chain import build_chain, effective_operators, sample_counts_readout
 from train.arguments import parse_args
 
 BELL_NAMES = ["phi+", "phi-", "psi+", "psi-"]

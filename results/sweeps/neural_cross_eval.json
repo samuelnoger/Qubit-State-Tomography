@@ -1,0 +1,56 @@
+{
+  "shots": 1000,
+  "n_states": 1000,
+  "mean": {
+    "1": {
+      "linear inversion": 0.011070878227787743,
+      "MLE": 0.007458911114296947,
+      "network trained on pure": 0.0014553136039137824,
+      "network trained on mixed": 0.02155918098548728
+    },
+    "2": {
+      "linear inversion": 0.010182313371539891,
+      "MLE": 0.00840387466986101,
+      "network trained on pure": 0.05626763075857564,
+      "network trained on mixed": 0.021542298796620868
+    },
+    "3": {
+      "linear inversion": 0.007102204684452484,
+      "MLE": 0.006267173257912571,
+      "network trained on pure": 0.08715211213526436,
+      "network trained on mixed": 0.013313267995240848
+    },
+    "4": {
+      "linear inversion": 0.00632432487795229,
+      "MLE": 0.005735988181133739,
+      "network trained on pure": 0.09429732991853498,
+      "network trained on mixed": 0.005223886574521688
+    }
+  },
+  "sem": {
+    "1": {
+      "linear inversion": 0.00023323187228130622,
+      "MLE": 0.00016952393949507826,
+      "network trained on pure": 1.615412776849275e-05,
+      "network trained on mixed": 0.00021027485261332837
+    },
+    "2": {
+      "linear inversion": 0.00022817623579258028,
+      "MLE": 0.00019786750093840557,
+      "network trained on pure": 0.000598073232770074,
+      "network trained on mixed": 0.0002107520754407935
+    },
+    "3": {
+      "linear inversion": 0.00017268678937929172,
+      "MLE": 0.00015716696862321368,
+      "network trained on pure": 0.0008785569742524751,
+      "network trained on mixed": 0.00017124346448134484
+    },
+    "4": {
+      "linear inversion": 0.00013317028899033944,
+      "MLE": 0.00012327584800946316,
+      "network trained on pure": 0.0008671189597020784,
+      "network trained on mixed": 0.00010374656732794964
+    }
+  }
+}
