@@ -2,9 +2,9 @@
 
 A self-contained project on **quantum state tomography**: reconstructing the density matrix of two qubits from measurement statistics. The pipeline evaluates ideal discrete readouts, simulated analog readout chains using machine learning classifiers (from [Qubit-Readout-ML](https://github.com/samuelnoger/Qubit-Readout-ML)), and finite-shot reconstruction using neural network priors.
 
-<img src="results/figures/ideal_tomography.jpg" alt="Ideal tomography" width="600">
+<img src="results/figures/ideal_tomography.png" alt="Ideal tomography" width="600">
 <img src="results/figures/variable_shot_eval.png" alt="Variable-shot Neural Network vs MLE" width="600">
-<img src="results/figures/readout_tomography.jpg" alt="Tomography through the readout chain" width="600">
+<img src="results/figures/readout_tomography.png" alt="Tomography through the readout chain" width="600">
 
 ---
 
