@@ -22,16 +22,19 @@ The QuTiP simulator implements $T_1$ decay, dispersive cavity response, and mult
 
 ### Ideal readout
 <img src="results/figures/ideal_tomography.png" alt="Ideal tomography" width="600">
+
 - **Bell states:** MLE falls as $1/N$ and reaches roughly $10^{-6}$ at $3 \times 10^5$ shots. Linear inversion falls as $1/\sqrt{N}$.
 - **Random pure and mixed states:** Both estimators scale roughly as $1/\sqrt{N}$ (pure) and $1/N$ (mixed) at high shot counts.
 
 ### Neural Network vs. MLE (Variable Shots)
 <img src="results/figures/variable_shot_eval.png" alt="Variable-shot Neural Network vs MLE" width="600">
+
 - **Localized Prior (`near_bell`):** Outperforms Maximum Likelihood Estimation at low shot counts by leveraging the learned manifold of the target physical boundary.
 - **General Prior (`broad`):** Underperforms MLE in the low-shot regime. The conditional-mean bias of MSE loss forces the broad network to predict the maximally mixed state ($I/4$) when finite-shot data is highly ambiguous.
 
 ### Through the readout chain
 <img src="results/figures/readout_tomography.png" alt="Tomography through the readout chain" width="600">
+
 - **Ignoring readout errors yields a hard noise floor:** Without correction, infidelity plateaus. More shots do not improve the reconstruction.
 - **A calibrated correction recovers scaling:** With MLE correction, the infidelity resumes falling with the number of shots. 
 - **Classifier impact:** Uncorrected, the matched filter performs worse than the LDA or CNN. With correction, the CNN and LDA perform similarly and slightly outperform the matched filter.
