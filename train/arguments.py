@@ -43,7 +43,7 @@ def parse_args():
     
     # Neural Tomography (Milestone 3)
     parser.add_argument('--tomo-data-path', type=str, default='data/neural_tomo_data.pt')
-    parser.add_argument('--tomo-state-type', type=str, choices=['pure', 'mixed', 'bell'], default='pure', help='State family for neural tomography')
+    parser.add_argument('--tomo-state-type', type=str, choices=['pure', 'mixed', 'bell', 'broad', 'near_bell'], default='pure', help='State family for neural tomography')
     parser.add_argument('--tomo-shots', type=int, default=1000, help='Shots per setting for the neural dataset')
     parser.add_argument('--n-train-tomo', type=int, default=50000)
     parser.add_argument('--n-val-tomo', type=int, default=5000)
