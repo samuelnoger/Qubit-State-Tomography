@@ -80,4 +80,4 @@ python -m tomography.readout_tomography \
 # 2. Neural Network State Tomography
 ./run_neural_tomo.sh
 python -m tomography.end_to_end_eval
-python -m tomography.benchmark_aware_speed
+python -m tomography.benchmark_speed
