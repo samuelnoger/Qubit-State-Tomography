@@ -37,7 +37,9 @@ def parametric_mle(counts, E_eff):
         return -np.sum(counts * np.log(p))
     
     init = np.zeros(7)
+    init[6] = 0.01  # Initialize mu at 1% to stay strictly inside the (0, 1) bound
     bounds = [(-np.pi, np.pi)] * 6 + [(0, 1)]
+    
     res = opt.minimize(nll, init, bounds=bounds, method='L-BFGS-B')
     return parametric_near_bell(res.x)
 
