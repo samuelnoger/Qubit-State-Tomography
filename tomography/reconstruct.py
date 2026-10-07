@@ -5,6 +5,43 @@ import numpy as np
 from utils.states import PAULI, I2, S1, S2
 
 
+# tomography/reconstruct.py
+"""State reconstruction from measured counts: linear inversion, physical projection, and MLE."""
+import numpy as np
+import scipy.optimize as opt
+
+from utils.states import PAULI, I2, S1, S2, bell_state
+
+
+def rot_1q(a, b, c):
+    """Standard ZYZ Euler decomposition for single-qubit rotation."""
+    return np.array([
+        [np.exp(-1j*(a+c)/2)*np.cos(b/2), -np.exp(-1j*(a-c)/2)*np.sin(b/2)],
+        [np.exp( 1j*(a-c)/2)*np.sin(b/2),  np.exp( 1j*(a+c)/2)*np.cos(b/2)]
+    ])
+
+
+def parametric_near_bell(params):
+    """Generates a 7-parameter state: local SU(2) rotations on a Bell state + depolarizing noise."""
+    angles, mu = params[:6], params[6]
+    U = np.kron(rot_1q(*angles[:3]), rot_1q(*angles[3:]))
+    phi_plus = bell_state("phi+")
+    return (1 - mu) * (U @ phi_plus @ U.conj().T) + (mu / 4.0) * np.eye(4)
+
+
+def parametric_mle(counts, E_eff):
+    """Model-based MLE for the 7-parameter near-Bell manifold."""
+    def nll(params):
+        rho = parametric_near_bell(params)
+        p = np.maximum(np.einsum('kmij,ji->km', E_eff, rho).real, 1e-12)
+        return -np.sum(counts * np.log(p))
+    
+    init = np.zeros(7)
+    bounds = [(-np.pi, np.pi)] * 6 + [(0, 1)]
+    res = opt.minimize(nll, init, bounds=bounds, method='L-BFGS-B')
+    return parametric_near_bell(res.x)
+
+
 def linear_inversion(counts):
     """rho = 1/4 [ II + sum_i <s_i I> s_i I + sum_j <I s_j> I s_j + sum_ij <s_i s_j> s_i s_j ].
 

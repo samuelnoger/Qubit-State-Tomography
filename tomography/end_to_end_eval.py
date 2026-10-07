@@ -1,15 +1,5 @@
 # tomography/end_to_end_eval.py
-"""End to end: states -> basis rotation -> noisy readout (confusion matrix of a classifier) -> counts -> reconstruction.
-
-Compared on the same states and counts:
-  naive MLE            : reported counts reconstructed as if readout were perfect
-  corrected MLE        : MLE with effective operators E'[k,m] = sum_t C[m,t] E[k,t], using the exact C (idealized calibration)
-  network (aware)      : network trained on counts generated through the same channel
-  network (ideal)      : network trained on perfect-readout counts, applied naively (optional; expected to fail)
-
-    python -m tomography.end_to_end_eval --ensemble near_bell --readout-json results/sweeps/readout_tomography.json \
-        --classifier cnn --aware-checkpoint checkpoints/neural_tomo_aware/neural_tomo_near_bell_cnn.pth
-"""
+"""End to end: states -> basis rotation -> noisy readout (confusion matrix of a classifier) -> counts -> reconstruction."""
 import argparse
 import json
 import os
@@ -18,11 +8,17 @@ from types import SimpleNamespace
 import matplotlib.pyplot as plt
 import numpy as np
 
-from tomography.benchmark_speed import load_network, measurement_operators, fidelity, mle, ENSEMBLES, _states
+# Replaced benchmark_speed dynamic _load hack with direct imports
+from utils.states import measurement_operators, fidelity, born_probabilities
+from utils.ensembles import random_broad_state, random_near_bell_state
+from tomography.reconstruct import mle, parametric_mle
+from tomography.benchmark_speed import load_network
+
+ENSEMBLES = {"broad": random_broad_state, "near_bell": random_near_bell_state}
 
 
 def sample_counts_channel(rho, E, C, shots, rng):
-    p = np.clip(_states.born_probabilities(rho, E), 0, None) @ C.T
+    p = np.clip(born_probabilities(rho, E), 0, None) @ C.T
     p = np.clip(p, 0, None)
     p /= p.sum(axis=1, keepdims=True)
     return np.stack([rng.multinomial(shots, p[k]) for k in range(p.shape[0])])
@@ -46,6 +42,10 @@ def run(args, C, networks):
         res = {f"naive MLE ({args.mle_iters[-1]} it.)": infidelities([mle(c, E, iters=args.mle_iters[-1]) for c in counts], true)}
         for it in args.mle_iters:
             res[f"corrected MLE ({it} it.)"] = infidelities([mle(c, E_eff, iters=it) for c in counts], true)
+            
+        if args.ensemble == "near_bell":
+            res["Parametric MLE (near-Bell prior)"] = infidelities([parametric_mle(c, E_eff) for c in counts], true)
+            
         for name, predict in networks.items():
             res[name] = infidelities(predict(x, n_shots), true)
         results[n_shots] = res
@@ -53,7 +53,7 @@ def run(args, C, networks):
         print(f"\n{args.ensemble} states, {n_shots} shots/setting, {args.n_states} states, channel: {args.classifier}")
         best_mle = min((m for m in res if m.startswith("corrected")), key=lambda m: res[m].mean())
         for method, inf in res.items():
-            line = f"  {method:<34s}: {inf.mean():.3e} +- {inf.std() / np.sqrt(len(inf)):.1e}"
+            line = f"  {method:<38s}: {inf.mean():.3e} +- {inf.std() / np.sqrt(len(inf)):.1e}"
             if method.startswith("network"):
                 d = inf - res[best_mle]
                 line += f"   | vs best corrected MLE: x{inf.mean() / res[best_mle].mean():.2f} (paired {d.mean():+.1e} +- {d.std() / np.sqrt(len(d)):.1e})"
@@ -71,11 +71,14 @@ def plot(results, args):
         mean = [results[n][m].mean() for n in shots]
         sem = [results[n][m].std() / np.sqrt(len(results[n][m])) for n in shots]
         
-        # Map method names to the requested colors and line styles
         if m.startswith("naive MLE"):
             fmt, color = 'o--', 'gray'
-        elif m.startswith("corrected MLE"):
+        elif m.startswith("corrected MLE") and "50" in m:
+            fmt, color = '^--', 'steelblue'
+        elif m.startswith("corrected MLE") and "1000" in m:
             fmt, color = 'o--', 'black'
+        elif m.startswith("Parametric MLE"):
+            fmt, color = 'd:', 'purple'
         elif m.startswith("network (trained without"):
             fmt, color = 's-', 'lightcoral'
         elif m.startswith("network (aware"):

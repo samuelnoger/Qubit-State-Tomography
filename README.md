@@ -13,6 +13,7 @@ A two-qubit density matrix $\rho$ has 15 real parameters. Measuring each qubit i
 **Reconstruction Estimators:**
 - *Linear inversion with projection:* Estimates Pauli correlators from counts, projecting the result onto the nearest physical state.
 - *Maximum likelihood (MLE):* Iterative solver ensuring the estimate remains positive semi-definite and trace-preserving.
+- *Parametric MLE:* A model-based maximum likelihood optimizer constrained explicitly to a 7-parameter near-Bell generation manifold.
 - *Neural Network (Prior-based):* A 37-dimensional input MLP (36 empirical frequencies + $\log_{10}N$) mapping finite-shot measurement statistics directly to a positive semi-definite density matrix via Cholesky parameterization.
 
 **Readout chain:** 
@@ -26,11 +27,12 @@ The QuTiP simulator implements $T_1$ decay, dispersive cavity response, and mult
 - **Bell states:** MLE falls as $1/N$ and reaches roughly $10^{-6}$ at $3 \times 10^5$ shots. Linear inversion falls as $1/\sqrt{N}$.
 - **Random pure and mixed states:** Both estimators scale roughly as $1/\sqrt{N}$ (pure) and $1/N$ (mixed) at high shot counts.
 
-### Neural Network vs. MLE (Variable Shots)
+### Neural Network vs. Classical Solvers
 <img src="results/figures/variable_shot_eval.png" alt="Variable-shot Neural Network vs MLE" width="600">
 
-- **Localized Prior (`near_bell`):** Outperforms Maximum Likelihood Estimation at low shot counts by leveraging the learned manifold of the target physical boundary.
-- **General Prior (`broad`):** Underperforms MLE in the low-shot regime. The conditional-mean bias of MSE loss forces the broad network to predict the maximally mixed state ($I/4$) when finite-shot data is highly ambiguous.
+- **General Prior (`broad`):** Underperforms generic MLE in the low-shot regime. The conditional-mean bias of MSE loss forces the broad network to predict the maximally mixed state ($I/4$) when finite-shot data is highly ambiguous.
+- **Localized Prior (`near_bell`):** Outperforms generic Maximum Likelihood Estimation at low shot counts by leveraging the learned manifold of the target physical boundary.
+- **Parametric Baseline Validation:** When compared against an exact 7-parameter Parametric MLE bound on near-Bell states, the network matches the classical optimizer's asymptotic fidelity ($\sim 2.7 \times 10^{-4}$ at 10,000 shots). The neural network operates as an amortized projector onto the generation manifold, achieving parity with the exact mathematical prior.
 
 ### Through the readout chain
 <img src="results/figures/readout_tomography.png" alt="Tomography through the readout chain" width="800">
@@ -39,16 +41,17 @@ The QuTiP simulator implements $T_1$ decay, dispersive cavity response, and mult
 - **A calibrated correction recovers scaling:** With MLE correction, the infidelity resumes falling with the number of shots. 
 - **Classifier impact:** Uncorrected, the matched filter performs worse than the LDA or CNN. With correction, the CNN and LDA perform similarly and slightly outperform the matched filter.
 
-### Inference Speed
-The neural network provides a massive reduction in reconstruction latency compared to Maximum Likelihood Estimation. This microsecond-scale execution makes the neural prior viable for real-time hardware feedback loops where MLE introduces critical bottlenecks.
+### Hardware-Aware Inference Speed
+The neural network provides a massive reduction in reconstruction latency compared to classical solvers, while implicitly absorbing the physical readout chain's confusion matrix. This microsecond-scale execution makes the neural prior viable for real-time hardware feedback loops where iterative MLE introduces critical bottlenecks.
 
-* **MLE (2000 iterations):** ~22.0 ms / state
-* **Neural Network (Unbatched):** ~90-110 μs / state (~200x speedup)
-* **Neural Network (Batched, size 100):** ~3-5 μs / state (> 4,000x speedup)
+* **Corrected MLE (1000 iterations):** ~11.0 ms / state
+* **Parametric MLE (Near-Bell bound):** ~5.6 ms / state
+* **Aware Neural Network (Single state):** ~90 μs / state (~120x speedup vs MLE, ~60x vs Parametric)
+* **Aware Neural Network (Batched, size 100):** ~3.4 μs / state (> 3,200x speedup vs MLE, ~1,600x vs Parametric)
 
-## Development Methodology
+## Development Notes
 
-The core CNN architecture, QuTiP simulation boilerplate, and classical baselines were scaffolded with the assistance of AI coding tools. Primary technical contributions focus on structuring the quantum state tomography math (Maximum Likelihood Estimation and Linear Inversion), designing the physical simulation to isolate multi-qubit crosstalk, decoupling analog data generation pools for high-shot scaling, and engineering variable-shot neural network architectures to benchmark learned priors against fundamental statistical limits.
+This repository is a student learning project exploring quantum state tomography and readout error mitigation. Much of the codebase and mathematical structuring was developed with the assistance of AI tools, implementing standard techniques from quantum information literature to benchmark their practical trade-offs.
 
 ## Quick start
 ```bash
@@ -62,4 +65,5 @@ python -m tomography.readout_tomography \
 
 # 2. Neural Network State Tomography
 ./run_neural_tomo.sh
-python -m tomography.variable_cross_eval
+python -m tomography.end_to_end_eval
+python -m tomography.benchmark_aware_speed

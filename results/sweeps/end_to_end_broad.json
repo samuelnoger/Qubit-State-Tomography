@@ -1,0 +1,65 @@
+{
+  "ensemble": "broad",
+  "classifier": "cnn",
+  "n_states": 300,
+  "mean": {
+    "10": {
+      "naive MLE (1000 it.)": 0.20529988054205559,
+      "corrected MLE (50 it.)": 0.1875677619602489,
+      "corrected MLE (1000 it.)": 0.19181099675088709,
+      "network (aware of readout errors)": 0.20100514725619434,
+      "network (trained without readout errors)": 0.2170412206336067
+    },
+    "100": {
+      "naive MLE (1000 it.)": 0.10033098089478329,
+      "corrected MLE (50 it.)": 0.0469213092227054,
+      "corrected MLE (1000 it.)": 0.04638489265785287,
+      "network (aware of readout errors)": 0.054458721778861824,
+      "network (trained without readout errors)": 0.10378552929540465
+    },
+    "1000": {
+      "naive MLE (1000 it.)": 0.0848329411082549,
+      "corrected MLE (50 it.)": 0.016956944736133496,
+      "corrected MLE (1000 it.)": 0.011096593578510434,
+      "network (aware of readout errors)": 0.013546417475330117,
+      "network (trained without readout errors)": 0.08171535186771363
+    },
+    "10000": {
+      "naive MLE (1000 it.)": 0.07176150051709954,
+      "corrected MLE (50 it.)": 0.010779958075114074,
+      "corrected MLE (1000 it.)": 0.0024632273065525396,
+      "network (aware of readout errors)": 0.0051811065125891235,
+      "network (trained without readout errors)": 0.06859393663102609
+    }
+  },
+  "sem": {
+    "10": {
+      "naive MLE (1000 it.)": 0.005107383744582227,
+      "corrected MLE (50 it.)": 0.005360585366838811,
+      "corrected MLE (1000 it.)": 0.005540791732592836,
+      "network (aware of readout errors)": 0.004940896893438379,
+      "network (trained without readout errors)": 0.005370644805067785
+    },
+    "100": {
+      "naive MLE (1000 it.)": 0.0026689834666467622,
+      "corrected MLE (50 it.)": 0.001401691981853336,
+      "corrected MLE (1000 it.)": 0.001504343458957497,
+      "network (aware of readout errors)": 0.0015726475900998476,
+      "network (trained without readout errors)": 0.002717553654487777
+    },
+    "1000": {
+      "naive MLE (1000 it.)": 0.002828529984331899,
+      "corrected MLE (50 it.)": 0.0005431104023534551,
+      "corrected MLE (1000 it.)": 0.0004522440269775833,
+      "network (aware of readout errors)": 0.00044782585189439785,
+      "network (trained without readout errors)": 0.0026911408599809127
+    },
+    "10000": {
+      "naive MLE (1000 it.)": 0.0027078987660042113,
+      "corrected MLE (50 it.)": 0.00039187169067347676,
+      "corrected MLE (1000 it.)": 0.00013133639892416108,
+      "network (aware of readout errors)": 0.0002348900677869611,
+      "network (trained without readout errors)": 0.002635510266473883
+    }
+  }
+}
