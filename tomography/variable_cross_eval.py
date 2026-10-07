@@ -27,7 +27,7 @@ def main():
     n_states = 250  # Lowered slightly to speed up the MLE sweep
     
     # Path depends on your exact N_TRAIN and EPOCHS shell variables
-    ckpt_dir = "checkpoints/neural_tomo_variable_600000_100ep"
+    ckpt_dir = "checkpoints/neural_tomo_variable_gamma_0.5_600000_100ep"
     broad_model = load_network(f"{ckpt_dir}/neural_tomo_broad.pth", device)
     bell_model = load_network(f"{ckpt_dir}/neural_tomo_near_bell.pth", device)
     
@@ -89,8 +89,8 @@ def main():
     plt.title('Variable-Shot Network vs MLE')
     plt.legend()
     plt.grid(True, alpha=0.3)
-    plt.savefig('results/figures/variable_shot_eval_n_hidden_264_n_layers_4.png', dpi=300)
-    print("\nSaved plot to variable_shot_eval_n_hidden_264_n_layers_4.png")
+    plt.savefig('results/figures/variable_shot_eval_n_hidden_264_n_layers_4_gamma_0.5.png', dpi=300)
+    print("\nSaved plot to variable_shot_eval_n_hidden_264_n_layers_4_gamma_0.5.png")
 
 if __name__ == "__main__":
     main()

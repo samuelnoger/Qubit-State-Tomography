@@ -68,6 +68,13 @@ def sample_counts(rho, E, n_shots, rng):
     p /= p.sum(axis=1, keepdims=True)
     return np.stack([rng.multinomial(n_shots, p[k]) for k in range(p.shape[0])])
 
+def sample_counts_channel(rho, E, C, shots, rng):
+    """Counts of *reported* outcomes: the true outcome probabilities are passed through the confusion matrix C."""
+    p = np.clip(born_probabilities(rho, E), 0, None) @ C.T
+    p = np.clip(p, 0, None)
+    p /= p.sum(axis=1, keepdims=True)
+    return np.stack([rng.multinomial(shots, p[k]) for k in range(p.shape[0])])
+
 
 # ---------------------------------------------------------------- metrics
 def _psd_sqrt(a):

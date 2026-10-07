@@ -51,6 +51,9 @@ def parse_args():
     parser.add_argument('--bell-noise', type=float, default=0.05, help='Depolarising noise added to exact Bell states')
     parser.add_argument('--tomo-hidden-dim', type=int, default=256)
     parser.add_argument('--tomo-n-layers', type=int, default=3, help='Number of hidden layers in the neural tomography model')
+    parser.add_argument('--tomo-loss-gamma', type=float, default=0.0, help='Weight training states by (N/316)^gamma; >0 also selects checkpoints by mean log10 infidelity')
+    parser.add_argument('--tomo-readout-json', type=str, default=None, help='Milestone 2 results file; counts are drawn through its confusion matrix')
+    parser.add_argument('--tomo-readout-classifier', type=str, default='cnn', help='Which classifier\'s confusion matrix to use')
 
     args, unknown = parser.parse_known_args()
     return args
