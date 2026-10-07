@@ -21,25 +21,39 @@ The QuTiP simulator implements $T_1$ decay, dispersive cavity response, and mult
 
 ## Results
 
-### Ideal readout
+### Ideal Readout
 <img src="results/figures/ideal_tomography.png" alt="Ideal tomography" width="800">
 
 - **Bell states:** MLE falls as $1/N$ and reaches roughly $10^{-6}$ at $3 \times 10^5$ shots. Linear inversion falls as $1/\sqrt{N}$.
 - **Random pure and mixed states:** Both estimators scale roughly as $1/\sqrt{N}$ (pure) and $1/N$ (mixed) at high shot counts.
 
-### Neural Network vs. Classical Solvers
+### Neural Network vs. Classical Solvers (Ideal Counts)
 <img src="results/figures/variable_shot_eval.png" alt="Variable-shot Neural Network vs MLE" width="600">
 
 - **General Prior (`broad`):** Underperforms generic MLE in the low-shot regime. The conditional-mean bias of MSE loss forces the broad network to predict the maximally mixed state ($I/4$) when finite-shot data is highly ambiguous.
 - **Localized Prior (`near_bell`):** Outperforms generic Maximum Likelihood Estimation at low shot counts by leveraging the learned manifold of the target physical boundary.
 - **Parametric Baseline Validation:** When compared against an exact 7-parameter Parametric MLE bound on near-Bell states, the network matches the classical optimizer's asymptotic fidelity ($\sim 2.7 \times 10^{-4}$ at 10,000 shots). The neural network operates as an amortized projector onto the generation manifold, achieving parity with the exact mathematical prior.
 
-### Through the readout chain
+### Readout Chain & Classifier Benchmarking
 <img src="results/figures/readout_tomography.png" alt="Tomography through the readout chain" width="800">
 
 - **Ignoring readout errors yields a hard noise floor:** Without correction, infidelity plateaus. More shots do not improve the reconstruction.
 - **A calibrated correction recovers scaling:** With MLE correction, the infidelity resumes falling with the number of shots. 
 - **Classifier impact:** Uncorrected, the matched filter performs worse than the LDA or CNN. With correction, the CNN and LDA perform similarly and slightly outperform the matched filter.
+
+### End-to-End Reconstruction Through Readout Noise
+
+<p align="center">
+  <img src="results/figures/end_to_end_broad.png" alt="End-to-end broad states" width="48%">
+  <img src="results/figures/end_to_end_near_bell.png" alt="End-to-end near-Bell states" width="48%">
+</p>
+
+Evaluating reconstruction on counts passed through the CNN classifier's confusion matrix benchmarks whether networks can implicitly invert the readout channel:
+
+- **Unaware estimators hit a noise floor:** Both naive MLE and the network trained on ideal counts plateau at infidelities of $10^{-2}$ to $10^{-1}$. Additional measurement shots provide no benefit because classification bias dominates statistical error.
+- **Implicit error mitigation:** The channel-aware network recovers standard finite-shot scaling alongside the corrected classical solvers, proving that a single feedforward pass can perform simultaneous channel inversion and state projection.
+- **Broad ensemble performance:** For generic states, converged corrected MLE (1000 iterations) achieves lower asymptotic infidelity at $N \ge 10^3$ ($2.7 \times 10^{-3}$ vs. $5.9 \times 10^{-3}$ at $10^4$ shots), reflecting the asymptotic efficiency of MLE when no low-dimensional prior exists.
+- **Near-Bell ensemble and parametric bounds:** On structured states, the aware network outperforms generic corrected MLE across all shot regimes. Compared to the 7-parameter Parametric MLE, the network matches its asymptotic performance at $10^4$ shots ($\sim 2.8 \times 10^{-4}$ vs. $2.5 \times 10^{-4}$) and achieves lower infidelity at low shot counts ($N \le 100$).
 
 ### Hardware-Aware Inference Speed
 The neural network provides a massive reduction in reconstruction latency compared to classical solvers, while implicitly absorbing the physical readout chain's confusion matrix. This microsecond-scale execution makes the neural prior viable for real-time hardware feedback loops where iterative MLE introduces critical bottlenecks.
