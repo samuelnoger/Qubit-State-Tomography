@@ -27,13 +27,6 @@ The QuTiP simulator implements $T_1$ decay, dispersive cavity response, and mult
 - **Bell states:** MLE falls as $1/N$ and reaches roughly $10^{-6}$ at $3 \times 10^5$ shots. Linear inversion falls as $1/\sqrt{N}$.
 - **Random pure and mixed states:** Both estimators scale roughly as $1/\sqrt{N}$ (pure) and $1/N$ (mixed) at high shot counts.
 
-### Neural Network vs. Classical Solvers (Ideal Counts)
-<img src="results/figures/variable_shot_eval.png" alt="Variable-shot Neural Network vs MLE" width="600">
-
-- **General Prior (`broad`):** Underperforms generic MLE in the low-shot regime. The conditional-mean bias of MSE loss forces the broad network to predict the maximally mixed state ($I/4$) when finite-shot data is highly ambiguous.
-- **Localized Prior (`near_bell`):** Outperforms generic Maximum Likelihood Estimation at low shot counts by leveraging the learned manifold of the target physical boundary.
-- **Parametric Baseline Validation:** When compared against an exact 7-parameter Parametric MLE bound on near-Bell states, the network matches the classical optimizer's asymptotic fidelity ($\sim 2.7 \times 10^{-4}$ at 10,000 shots). The neural network operates as an amortized projector onto the generation manifold, achieving parity with the exact mathematical prior.
-
 ### Readout Chain & Classifier Benchmarking
 <img src="results/figures/readout_tomography.png" alt="Tomography through the readout chain" width="800">
 
